@@ -1,11 +1,14 @@
 from fastapi import FastAPI
-
+from pydantic import BaseModel
 app = FastAPI(
     title="CampusHub API",
     description="A simple University Management API",
     version="1.0"
 )
-
+class Student(BaseModel):
+    name: str
+    department: str
+    semester: int
 students = [
     {
         "id": 1,
@@ -26,6 +29,22 @@ students = [
         "semester": 3
     }
 ]
+@app.post("/students")
+def add_student(student: Student):
+
+    new_student = {
+        "id": len(students) + 1,
+        "name": student.name,
+        "department": student.department,
+        "semester": student.semester
+    }
+
+    students.append(new_student)
+
+    return {
+        "message": "Student Added Successfully",
+        "student": new_student
+    }
 
 teachers = [
     {
@@ -84,6 +103,13 @@ def student_count():
     return {
         "Total Students": len(students)
     }
+@app.get("/students/{student_id}")
+def get_student(student_id: int):
+    for student in students:
+        if student["id"] == student_id:
+            return student
+    return {"message": "Student not found"}
+
 
 
 @app.get("/teachers/count")

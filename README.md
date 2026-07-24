@@ -31,3 +31,9 @@ python -m uvicorn app:app --reload
 ## API Documentation
 
 http://127.0.0.1:8000/docs
+
+## New Features
+
+* Get Student by ID
+* Add Student
+* Request Validation using Pydantic
